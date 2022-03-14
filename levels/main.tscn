@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://fish/player/player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://spawner/spawner.tscn" type="PackedScene" id=2]
+[ext_resource path="res://game_score/game_score.gd" type="Script" id=3]
+[ext_resource path="res://game_score/score_label.gd" type="Script" id=4]
+
+[node name="main" type="Node2D"]
+
+[node name="player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 240, 180 )
+
+[node name="spawner" parent="." instance=ExtResource( 2 )]
+
+[node name="game_score_counter" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="CenterContainer" type="CenterContainer" parent="HUD"]
+anchor_top = 0.1
+anchor_right = 1.0
+anchor_bottom = 0.1
+
+[node name="ScoreLabel" type="Label" parent="HUD/CenterContainer"]
+margin_left = 236.0
+margin_right = 244.0
+margin_bottom = 14.0
+text = "0"
+script = ExtResource( 4 )
+
+[connection signal="enemy_eaten" from="player" to="game_score_counter" method="_on_score_increase"]
+[connection signal="score_increased" from="game_score_counter" to="player" method="_on_game_score_counter_score_increased"]
+[connection signal="score_increased" from="game_score_counter" to="spawner" method="_on_game_score_counter_score_increased"]
+[connection signal="score_increased" from="game_score_counter" to="HUD/CenterContainer/ScoreLabel" method="_on_game_score_counter_score_increased"]
